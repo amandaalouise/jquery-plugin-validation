@@ -1,0 +1,40 @@
+{
+  "name": "jquery-input-validation",
+  "version": "1.0.0",
+  "description": "Live validation for input fields",
+  "keywords": [
+    "jquery-plugin",
+    "jquery",
+    "plugins"
+  ],
+  "author": {
+    "name": "Amanda Louise Acosta Morais",
+    "email": "amandaalouise@live.com",
+    "url": "https://github.com/amandaalouise"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">=1.5.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-coffee": "^2.1.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-jscs": "^3.0.1",
+    "grunt-karma": "^3.0.2",
+    "jscs": "^3.0.7",
+    "karma": "^4.4.1",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-qunit": "^0.1.5",
+    "phantomjs": "^1.9.18",
+    "qunitjs": "^1.19.0"
+  },
+  "scripts": {
+    "jscs": "jscs src",
+    "test": "npm run jscs && grunt travis --verbose"
+  }
+}

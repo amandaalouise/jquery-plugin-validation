@@ -1,0 +1,22 @@
+{
+  "name": "jquery-boilerplate",
+  "license": "MIT",
+  "authors": [
+    "Amanda Louise Acosta Morais <amandaalouise@live.com>"
+  ],
+  "description": "Live validation for input fields.",
+  "keywords": [
+    "jquery",
+    "plugin",
+    "jquery-plugin"
+  ],
+  "main": "src/jquery.input-validation.js",
+  "dependencies": {
+    "jquery": "1"
+  },
+  "ignore": [
+    "npm-debug.log",
+    "bower_components",
+    "node_modules"
+  ]
+}
