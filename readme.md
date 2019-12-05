@@ -3,8 +3,9 @@
 ## Usage
 
 Invoke validation by calling the function with the selector of the form tag:
-
-    $("#validate").inputValidation();
+```javascript
+$("#validate").inputValidation();
+```
 
 ```html
 <form id="validate"></form>
@@ -12,21 +13,24 @@ Invoke validation by calling the function with the selector of the form tag:
 
 To specify which fields to validate, include the class "validate" on the input:
 ```html
-    <input id="phone" name="phone" type="text" class="form-control validate">
+<input id="phone" name="phone" type="text" class="form-control validate">
 ```
 
 ## Options
 |  Option | Description | Accepted values  |
 | ------------ | ------------ | ------------ |
-| classes  | CSS classes to apply to error message of the input. | *(optional)* string  (e.g. "error text-center")  |
-| border | CSS class of the border of the input when displaying error.  | *(optional)*string |
-| borderinline | Inline style of the border |  *(optional)* string (e.g. "border: solid 1px red")|
+| classes  | CSS classes to apply to error message of the input. | *(optional)* string  |
+| border | CSS class of the border of the input when displaying error.  | *(optional)* string |
+| borderinline | Inline style of the border |  *(optional)* string 
 
 ### Example
-    $("#validate").inputValidation({
-        classes: string,
-        border: string,
-    });
+```javascript
+$("#validate").inputValidation({
+	classes: "error text-center",
+	border: "border-red",
+	borderinline: "border: solid 1px red"
+});
+```
 
 
 ## Data Attributes
