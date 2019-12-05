@@ -49,3 +49,26 @@ Use the data attributes below to configure input specific validation
 	data-constraint="5"
 	data-validate-error-msg-text="Please enter up to 5 characters.">
 ```
+
+# Default validation types and messages
+
+|  Type | Default message  |
+| ------------ | ------------ |
+| email   |  Please enter a valid email address. |
+| url |  Please enter a valid URL. |
+| date | Please enter a valid date (Validates mdY or Ymd with "-" or "/") |
+| datemdy | Please enter a valid date mm-dd-YYYY. (Accepts "-" or "/")|
+| dateymd | Please enter a valid date YYYY-mm-dd. (Accepts "-" or "/") |
+| number | Please enter a valid number. |
+| digits |  Please enter only digits. |
+| equalTo | Please enter the same value again. |
+| phoneUS | Please specify a valid phone number. | 
+| notempty | This field can not be empty. |
+| gtzero | Please enter a number greater than zero. |
+| maxlength | Please enter no more than {0} characters. |
+| minlength | Please enter at least {0} characters. |
+| notempty_integer | This field can not be empty or zero. |
+
+### Rendering example
+
+![](https://github.com/amandaalouise/jquery-plugin-validation/blob/master/demo/demofields.png?raw=true)
