@@ -1,4 +1,7 @@
-#Usage
+# jQuery plugin validation
+
+## Usage
+
 Invoke validation by calling the function with the selector of the form tag:
 
     $("#validate").inputValidation();
@@ -12,21 +15,21 @@ To specify which fields to validate, include the class "validate" on the input:
     <input id="phone" name="phone" type="text" class="form-control validate">
 
 
-#Options
+## Options
 |  Option | Description | Accepted values  |
 | ------------ | ------------ |
 | classes  | CSS classes to apply to error message of the input. | *(optional) *string  (e.g. "error text-center")  |
 | border | CSS class of the border of the input when displaying error.  | * (optional) *string |
 | borderinline | Inline style of the border |  *(optional)* string (e.g. "border: solid 1px red")|
 
-###Example
+### Example
     $("#validate").inputValidation({
         classes: string,
         border: string,
     });
 
 
-#Data Attributes
+## Data Attributes
 Use the data attributes below to configure input specific validation
 
 | Attribute  | Description  |
