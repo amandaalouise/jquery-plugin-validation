@@ -1,3 +1,7 @@
 .input-error {
     border: solid 1px red !important;
 }
+
+.warning-txt {
+    color: orange;
+}

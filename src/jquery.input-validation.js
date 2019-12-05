@@ -34,7 +34,6 @@
 
 		// overwrite and/or extend configuration with custom user settings
 		if (settings) {
-			console.log(settings);
 			$.extend(this._configuration, settings);
 		}
 
@@ -282,9 +281,11 @@
 				message = retrieved.replace("{0}", param);
 			}
 
+			var errorClass = plugin._configuration.classes ? plugin._configuration.classes : "text-danger";
+
 			//Returns validation error message
 			return "<div id='error_validate'>" +
-				"<small class='form-text text-danger'>" +
+				"<small class='form-text " + errorClass +"'>" +
 				message +
 				"</small></div>";
 		},
