@@ -132,7 +132,7 @@
 
 			phoneUS: function (value, param) {
 				value = value.replace(/\s+/g, "");
-				return value.length > 9 && value.match(/^(\+?1-?)?(\([2-9]([02-9]\d|1[02-9])\)|[2-9]([02-9]\d|1[02-9]))-?[2-9]\d{2}-?\d{4}$/);
+				return value.length > 9 && value.match(/^\(?\d{3}\)?[-\.]? *\d{3}[-\.]? *[-\.]?\d{4}$/);
 			},
 		},
 
@@ -227,6 +227,8 @@
 			var type = input.data("validate-type");
 			var value = input.val();
 			var constraint = input.data("constraint");
+			var inlineborder = plugin.settings.borderinline ? plugin.settings.borderinline : "";
+			var border = plugin.settings.border ? plugin.settings.border : "input-error";
 
 			if (!plugin._methods[type](value, constraint)) {
 
@@ -235,10 +237,32 @@
 					$(plugin._defaultMessage(errorMsg, type, constraint)).insertAfter(input);
 				}
 
-				input.addClass("input-error");
+				if(border == "input-error" && inlineborder != "") {
+					input.css("border", inlineborder);
+				}
+
+				if(border != "input-error") {
+					input.addClass(border);
+				}
+
+				if(border == "input-error" && inlineborder == "") {
+					input.addClass("input-error");
+				}
+
 			} else {
 				input.next("#error_validate").remove();
-				input.removeClass("input-error");
+				
+				if(border == "input-error" && inlineborder != "") {
+					input.css("border", "");
+				}
+
+				if(border != "input-error") {
+					input.removeClass(border);
+				}
+
+				if(border == "input-error" && inlineborder == "") {
+					input.removeClass("input-error");
+				}
 			}
 		},
 
