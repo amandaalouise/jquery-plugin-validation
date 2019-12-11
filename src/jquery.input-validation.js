@@ -45,7 +45,7 @@
 	}
 
 	$.extend($.fn[pluginName], {
-		addMethod: function (name, method, message) {
+		addType: function (name, method, message) {
 
 			var plugin = new Plugin;
 
@@ -190,7 +190,7 @@
 		},
 
 		/**
-		 * initialize function, will be called once on every plugin instance
+		 * Check if value matches the regex of the type
 		 * @access private
 		 * @type {function}
 		 * @returns void
@@ -214,6 +214,7 @@
 				border = plugin.settings.border ? plugin.settings.border : "input-error";
 			}
 
+			//Verifies if it has one or more validation types
 			if (Array.isArray(type)) {
 				for (var i = 0; i < type.length; i++) {
 					subCheck(type[i], value, constraint);
@@ -282,6 +283,7 @@
 		},
 
 		/**
+		 * Displays default message or custom message if provided
 		 * @access private
 		 * @type {function}
 		 * @returns string

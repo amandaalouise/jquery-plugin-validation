@@ -53,7 +53,7 @@
 	}
 
 	$.extend($.fn[pluginName], {
-		addMethod: function (name, method, message) {
+		addType: function (name, method, message) {
 
 			var plugin = new Plugin;
 
