@@ -56,67 +56,43 @@
 
 		//Validation methods
 		_methods: {
-			required: function (value) {
-
-				/**
-				 * the plugin instance itself, use it to prevent 'this' mismatch
-				 * @type {Plugin}
-				 */
-				var plugin = this;
-
-				// Check if dependency is met
-				if (!this.depend(param, plugin._items)) {
-					return "dependency-mismatch";
-				}
-				if (plugin._items.nodeName.toLowerCase() === "select") {
-
-					// Could be an array for select-multiple or a string, both are fine this way
-					var val = $(plugin._items).val();
-					return val && val.length > 0;
-				}
-				if (this.checkable(plugin._items)) {
-					return this.getLength(value, plugin._items) > 0;
-				}
-				return value !== undefined && value !== null && value.length > 0;
-			},
-
-			email: function (value, param) {
+			email: function (value) {
 				return /^[a-zA-Z0-9.!#$%&"*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 			},
 
-			url: function (value, param) {
+			url: function (value,) {
 				return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
 			},
 
-			date: function (value, param) {
+			date: function (value) {
 				return this.datemdy(value) || this.dateymd(value);
 			},
 
-			dateymd: function (value, param) {
+			dateymd: function (value) {
 				return /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test(value);
 			},
 
-			datemdy: function (value, param) {
+			datemdy: function (value) {
 				return /^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/.test(value);
 			},
 
-			number: function (value, param) {
+			number: function (value) {
 				return /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
 			},
 
-			digits: function (value, param) {
+			digits: function (value) {
 				return /^\d+$/.test(value);
 			},
 
-			notempty: function (value, param) {
+			notempty: function (value) {
 				return /^(?!\s*$).+/.test(value);
 			},
 
-			notempty_integer: function (value, param) {
+			notempty_integer: function (value) {
 				return this.notempty(value) || this.gtzero(value);
 			},
 
-			gtzero: function (value, param) {
+			gtzero: function (value) {
 				return /^[1-9]\d*$/.test(value);
 			},
 
@@ -130,7 +106,7 @@
 				return length <= param;
 			},
 
-			phoneUS: function (value, param) {
+			phoneUS: function (value) {
 				value = value.replace(/\s+/g, "");
 				return value.length > 9 && value.match(/^\(?\d{3}\)?[-\.]? *\d{3}[-\.]? *[-\.]?\d{4}$/);
 			},
@@ -138,7 +114,6 @@
 
 		//Default validation messages
 		_messages: {
-			required: "This field is required.",
 			email: "Please enter a valid email address.",
 			url: "Please enter a valid URL.",
 			date: "Please enter a valid date",
@@ -227,41 +202,57 @@
 			var type = input.data("validate-type");
 			var value = input.val();
 			var constraint = input.data("constraint");
-			var inlineborder = plugin.settings.borderinline ? plugin.settings.borderinline : "";
-			var border = plugin.settings.border ? plugin.settings.border : "input-error";
+			var inlineborder = "";
+			var border = "input-error";
 
-			if (!plugin._methods[type](value, constraint)) {
+			if (plugin.settings !== undefined) {
+				inlineborder = plugin.settings.borderinline ? plugin.settings.borderinline : "";
+				border = plugin.settings.border ? plugin.settings.border : "input-error";
+			}
 
-				var errorMsg = input.data("validate-error-msg-text") != undefined ? input.data("validate-error-msg-text") : "";
-				if (input.next("#error_validate").length <= 0) {
-					$(plugin._defaultMessage(errorMsg, type, constraint)).insertAfter(input);
+			if(Array.isArray(type)) {
+					for(var i = 0; i < type.length; i++) {
+					subCheck(type[i], value, constraint);
 				}
-
-				if(border == "input-error" && inlineborder != "") {
-					input.css("border", inlineborder);
-				}
-
-				if(border != "input-error") {
-					input.addClass(border);
-				}
-
-				if(border == "input-error" && inlineborder == "") {
-					input.addClass("input-error");
-				}
-
 			} else {
-				input.next("#error_validate").remove();
-				
-				if(border == "input-error" && inlineborder != "") {
-					input.css("border", "");
-				}
+				subCheck(type, value, constraint);
+			}
 
-				if(border != "input-error") {
-					input.removeClass(border);
-				}
+			function subCheck(type, value, constraint) {
 
-				if(border == "input-error" && inlineborder == "") {
-					input.removeClass("input-error");
+				if (!plugin._methods[type](value, constraint)) {
+
+					var errorMsg = input.data("validate-error-msg-text") !== undefined ? input.data("validate-error-msg-text") : "";
+					if (input.next("#error_validate").length <= 0) {
+						$(plugin._defaultMessage(errorMsg, type, constraint)).insertAfter(input);
+					}
+
+					if (border === "input-error" && inlineborder !== "") {
+						input.css("border", inlineborder);
+					}
+
+					if (border !== "input-error") {
+						input.addClass(border);
+					}
+
+					if (border === "input-error" && inlineborder === "") {
+						input.addClass("input-error");
+					}
+
+				} else {
+					input.next("#error_validate").remove();
+
+					if (border === "input-error" && inlineborder !== "") {
+						input.css("border", "");
+					}
+
+					if (border !== "input-error") {
+						input.removeClass(border);
+					}
+
+					if (border === "input-error" && inlineborder === "") {
+						input.removeClass("input-error");
+					}
 				}
 			}
 		},
@@ -281,7 +272,7 @@
 			});
 
 			//Avoid form submission if errors have been found
-			if(errorInputs.length > 0) {
+			if (errorInputs.length > 0) {
 				event.preventDefault();
 			}
 		},
@@ -309,7 +300,7 @@
 
 			//Returns validation error message
 			return "<div id='error_validate'>" +
-				"<small class='form-text " + errorClass +"'>" +
+				"<small class='form-text " + errorClass + "'>" +
 				message +
 				"</small></div>";
 		},

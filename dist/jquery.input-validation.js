@@ -64,31 +64,7 @@
 
 		//Validation methods
 		_methods: {
-			required: function (value) {
-
-				/**
-				 * the plugin instance itself, use it to prevent 'this' mismatch
-				 * @type {Plugin}
-				 */
-				var plugin = this;
-
-				// Check if dependency is met
-				if (!this.depend(param, plugin._items)) {
-					return "dependency-mismatch";
-				}
-				if (plugin._items.nodeName.toLowerCase() === "select") {
-
-					// Could be an array for select-multiple or a string, both are fine this way
-					var val = $(plugin._items).val();
-					return val && val.length > 0;
-				}
-				if (this.checkable(plugin._items)) {
-					return this.getLength(value, plugin._items) > 0;
-				}
-				return value !== undefined && value !== null && value.length > 0;
-			},
-
-			email: function (value, param) {
+			email: function (value) {
 				return /^[a-zA-Z0-9.!#$%&"*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 			},
 
@@ -146,7 +122,6 @@
 
 		//Default validation messages
 		_messages: {
-			required: "This field is required.",
 			email: "Please enter a valid email address.",
 			url: "Please enter a valid URL.",
 			date: "Please enter a valid date",
@@ -235,41 +210,57 @@
 			var type = input.data("validate-type");
 			var value = input.val();
 			var constraint = input.data("constraint");
-			var inlineborder = plugin.settings.borderinline ? plugin.settings.borderinline : "";
-			var border = plugin.settings.border ? plugin.settings.border : "input-error";
+			var inlineborder = "";
+			var border = "input-error";
 
-			if (!plugin._methods[type](value, constraint)) {
+			if (plugin.settings !== undefined) {
+				inlineborder = plugin.settings.borderinline ? plugin.settings.borderinline : "";
+				border = plugin.settings.border ? plugin.settings.border : "input-error";
+			}
 
-				var errorMsg = input.data("validate-error-msg-text") != undefined ? input.data("validate-error-msg-text") : "";
-				if (input.next("#error_validate").length <= 0) {
-					$(plugin._defaultMessage(errorMsg, type, constraint)).insertAfter(input);
+			if(Array.isArray(type)) {
+					for(var i = 0; i < type.length; i++) {
+					subCheck(type[i], value, constraint);
 				}
-
-				if(border == "input-error" && inlineborder != "") {
-					input.css("border", inlineborder);
-				}
-
-				if(border != "input-error") {
-					input.addClass(border);
-				}
-
-				if(border == "input-error" && inlineborder == "") {
-					input.addClass("input-error");
-				}
-
 			} else {
-				input.next("#error_validate").remove();
-				
-				if(border == "input-error" && inlineborder != "") {
-					input.css("border", "");
-				}
+				subCheck(type, value, constraint);
+			}
 
-				if(border != "input-error") {
-					input.removeClass(border);
-				}
+			function subCheck(type, value, constraint) {
 
-				if(border == "input-error" && inlineborder == "") {
-					input.removeClass("input-error");
+				if (!plugin._methods[type](value, constraint)) {
+
+					var errorMsg = input.data("validate-error-msg-text") !== undefined ? input.data("validate-error-msg-text") : "";
+					if (input.next("#error_validate").length <= 0) {
+						$(plugin._defaultMessage(errorMsg, type, constraint)).insertAfter(input);
+					}
+
+					if (border === "input-error" && inlineborder !== "") {
+						input.css("border", inlineborder);
+					}
+
+					if (border !== "input-error") {
+						input.addClass(border);
+					}
+
+					if (border === "input-error" && inlineborder === "") {
+						input.addClass("input-error");
+					}
+
+				} else {
+					input.next("#error_validate").remove();
+
+					if (border === "input-error" && inlineborder !== "") {
+						input.css("border", "");
+					}
+
+					if (border !== "input-error") {
+						input.removeClass(border);
+					}
+
+					if (border === "input-error" && inlineborder === "") {
+						input.removeClass("input-error");
+					}
 				}
 			}
 		},
@@ -289,7 +280,7 @@
 			});
 
 			//Avoid form submission if errors have been found
-			if(errorInputs.length > 0) {
+			if (errorInputs.length > 0) {
 				event.preventDefault();
 			}
 		},
@@ -317,7 +308,7 @@
 
 			//Returns validation error message
 			return "<div id='error_validate'>" +
-				"<small class='form-text " + errorClass +"'>" +
+				"<small class='form-text " + errorClass + "'>" +
 				message +
 				"</small></div>";
 		},
