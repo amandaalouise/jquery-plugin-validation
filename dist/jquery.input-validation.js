@@ -52,15 +52,19 @@
 		return this._configuration.chainable ? elements : this;
 	}
 
+	$.extend($.fn[pluginName], {
+		addMethod: function (name, method, message) {
+
+			var plugin = new Plugin;
+
+			plugin._methods[name] = method;
+			plugin._messages[name] = message !== undefined ? message : plugin._messages[name];
+
+		}
+	});
+
 	// extend own functions here
 	$.extend(Plugin.prototype, {
-		_addMethod: function (name, method, message) {
-			$.Plugin.methods[name] = method;
-			$.Plugin.messages[name] = message !== undefined ? message : $.Plugin.messages[name];
-			if (method.length < 3) {
-				$.Plugin.addClassRules(name, $.inputValidation.normalizeRule(name));
-			}
-		},
 
 		//Validation methods
 		_methods: {
@@ -68,39 +72,39 @@
 				return /^[a-zA-Z0-9.!#$%&"*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 			},
 
-			url: function (value, param) {
+			url: function (value) {
 				return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
 			},
 
-			date: function (value, param) {
+			date: function (value) {
 				return this.datemdy(value) || this.dateymd(value);
 			},
 
-			dateymd: function (value, param) {
+			dateymd: function (value) {
 				return /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test(value);
 			},
 
-			datemdy: function (value, param) {
+			datemdy: function (value) {
 				return /^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/.test(value);
 			},
 
-			number: function (value, param) {
+			number: function (value) {
 				return /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
 			},
 
-			digits: function (value, param) {
+			digits: function (value) {
 				return /^\d+$/.test(value);
 			},
 
-			notempty: function (value, param) {
+			notempty: function (value) {
 				return /^(?!\s*$).+/.test(value);
 			},
 
-			notempty_integer: function (value, param) {
+			notempty_integer: function (value) {
 				return this.notempty(value) || this.gtzero(value);
 			},
 
-			gtzero: function (value, param) {
+			gtzero: function (value) {
 				return /^[1-9]\d*$/.test(value);
 			},
 
@@ -114,7 +118,7 @@
 				return length <= param;
 			},
 
-			phoneUS: function (value, param) {
+			phoneUS: function (value) {
 				value = value.replace(/\s+/g, "");
 				return value.length > 9 && value.match(/^\(?\d{3}\)?[-\.]? *\d{3}[-\.]? *[-\.]?\d{4}$/);
 			},
@@ -188,7 +192,7 @@
 				});
 
 				$(this).find(":input.validate").on("focusout", function () {
-					$(this).removeClass("input-error");
+					plugin._check($(this));
 				});
 			});
 		},
@@ -218,8 +222,8 @@
 				border = plugin.settings.border ? plugin.settings.border : "input-error";
 			}
 
-			if(Array.isArray(type)) {
-					for(var i = 0; i < type.length; i++) {
+			if (Array.isArray(type)) {
+				for (var i = 0; i < type.length; i++) {
 					subCheck(type[i], value, constraint);
 				}
 			} else {
@@ -232,7 +236,7 @@
 
 					var errorMsg = input.data("validate-error-msg-text") !== undefined ? input.data("validate-error-msg-text") : "";
 					if (input.next("#error_validate").length <= 0) {
-						$(plugin._defaultMessage(errorMsg, type, constraint)).insertAfter(input);
+						$(plugin._defaultMessage(errorMsg, type, constraint, input)).insertAfter(input);
 					}
 
 					if (border === "input-error" && inlineborder !== "") {
@@ -290,12 +294,14 @@
 		 * @type {function}
 		 * @returns string
 		 */
-		_defaultMessage: function (message, type, param) {
+		_defaultMessage: function (message, type, param, input) {
 			/**
 			 * the plugin instance itself, use it to prevent 'this' mismatch
 			 * @type {Plugin}
 			 */
 			var plugin = this;
+
+			var classerror = input.data("validate-error-msg-class") !== undefined ? input.data("validate-error-msg-class") : "text-danger";
 
 			//Check if message was specified
 			if (message === "") {
@@ -304,11 +310,9 @@
 				message = retrieved.replace("{0}", param);
 			}
 
-			var errorClass = plugin._configuration.classes ? plugin._configuration.classes : "text-danger";
-
 			//Returns validation error message
 			return "<div id='error_validate'>" +
-				"<small class='form-text " + errorClass + "'>" +
+				"<small class='form-text " + classerror + "'>" +
 				message +
 				"</small></div>";
 		},

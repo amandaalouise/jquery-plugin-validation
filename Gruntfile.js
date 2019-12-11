@@ -25,7 +25,12 @@ module.exports = function( grunt ) {
 			dist: {
 				src: [ "src/jquery.input-validation.js" ],
 				dest: "dist/jquery.input-validation.js"
-			}
+			},
+			extras: {
+                files: {
+				    "dist/additional-types.js": [ "src/additional-types/*.js" ]
+			    }
+            },
 		},		
 		// Lint definitions
 		jshint: {
