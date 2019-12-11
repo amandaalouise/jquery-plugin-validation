@@ -16,6 +16,25 @@ To specify which fields to validate, include the class "validate" on the input:
 <input id="phone" name="phone" type="text" class="form-control validate">
 ```
 
+## Data Attributes
+Use the data attributes below to configure input specific validation
+
+| Attribute  | Description  |
+| ------------ | ------------ |
+| data-validate-error-msg-text  | Custom error message |
+| data-validate-type  | Input type to validate |
+| data-constraint | value of reference for max or min characters |
+| data-validate-error-msg-class | CSS class for error message |
+
+### Example usage
+```html
+    <input id="maxlength5" name="maxlength5" type="text" class="form-control validate" 
+	data-validate-type="maxlength" 
+	data-constraint="5"
+	data-validate-error-msg-text="Please enter up to 5 characters.">
+```
+
+
 ## Options
 |  Option | Description | Accepted values  |
 | ------------ | ------------ | ------------ |
@@ -32,23 +51,6 @@ $("#validate").inputValidation({
 });
 ```
 
-
-## Data Attributes
-Use the data attributes below to configure input specific validation
-
-| Attribute  | Description  |
-| ------------ | ------------ |
-| data-validate-error-msg-text  | Custom error message |
-| data-validate-type  | Input type to validate |
-| data-constraint | value of reference for max or min characters |
-
-### Example usage
-```html
-    <input id="maxlength5" name="maxlength5" type="text" class="form-control validate" 
-	data-validate-type="maxlength" 
-	data-constraint="5"
-	data-validate-error-msg-text="Please enter up to 5 characters.">
-```
 
 # Default validation types and messages
 
