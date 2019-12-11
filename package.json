@@ -12,7 +12,7 @@
     "email": "amandaalouise@live.com",
     "url": "https://github.com/amandaalouise"
   },
-  "license": "MIT",
+  "license": "GNU GENERAL PUBLIC LICENSE",
   "dependencies": {
     "jquery": ">=1.5.1"
   },

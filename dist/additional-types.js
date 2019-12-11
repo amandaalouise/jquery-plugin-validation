@@ -4,7 +4,7 @@
  *  
  *
  *  Made by Amanda Louise Acosta Morais
- *  Under MIT License
+ *  Under GNU GENERAL PUBLIC LICENSE License
  */
 /*
 * Valida CEPs do brasileiros:

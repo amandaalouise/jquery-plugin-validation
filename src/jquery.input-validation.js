@@ -1,5 +1,5 @@
-;
-(function ($, window, document, undefined) {
+/* Semicolon in case another is left open */
+;(function ($, window, document, undefined) {
 	"use strict";
 
 	/**
@@ -47,7 +47,7 @@
 	$.extend($.fn[pluginName], {
 		addType: function (name, method, message) {
 
-			var plugin = new Plugin;
+			var plugin = new Plugin();
 
 			plugin._methods[name] = method;
 			plugin._messages[name] = message !== undefined ? message : plugin._messages[name];
@@ -173,7 +173,7 @@
 			$(plugin._items).each(function () {
 
 				$(this).on("submit", function () {
-					$(this).find(':input.validate').each(function () {
+					$(this).find(":input.validate").each(function () {
 						plugin._check($(this));
 					});
 					plugin._formValidation($(this));
@@ -270,10 +270,10 @@
 		 */
 		_formValidation: function (input) {
 
-			var errorInputs = []
+			var errorInputs = [];
 
-			input.find('.input-error').each(function () {
-				errorInputs.push($(this).attr('name'));
+			input.find(".input-error").each(function () {
+				errorInputs.push($(this).attr("name"));
 			});
 
 			//Avoid form submission if errors have been found
