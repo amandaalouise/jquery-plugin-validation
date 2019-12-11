@@ -41,6 +41,7 @@ Use the data attributes below to configure input specific validation
 | data-validate-error-msg-text  | Custom error message |
 | data-validate-type  | Input type to validate |
 | data-constraint | value of reference for max or min characters |
+| data-validate-error-msg-class | CSS class for error message |
 
 ### Example usage
 ```html
