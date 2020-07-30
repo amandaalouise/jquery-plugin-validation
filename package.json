@@ -14,10 +14,11 @@
   },
   "license": "GNU GENERAL PUBLIC LICENSE",
   "dependencies": {
-    "jquery": ">=1.5.1"
+    "jquery": ">=1.5.1",
+    "load-grunt-tasks": "^5.1.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.4",
+    "grunt": "^1.2.1",
     "grunt-contrib-coffee": "^2.1.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-jshint": "^2.1.0",
@@ -25,11 +26,13 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-jscs": "^3.0.1",
     "grunt-karma": "^3.0.2",
+    "jasmine-core": "^3.6.0",
     "jscs": "^3.0.7",
     "karma": "^4.4.1",
+    "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^0.1.6",
     "karma-phantomjs-launcher": "^1.0.4",
-    "karma-qunit": "^0.1.5",
+    "karma-qunit": "^0.1.9",
     "phantomjs": "^1.9.18",
     "qunitjs": "^1.19.0"
   },
