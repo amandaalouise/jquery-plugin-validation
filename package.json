@@ -14,7 +14,7 @@
   },
   "license": "GNU GENERAL PUBLIC LICENSE",
   "dependencies": {
-    "jquery": ">=1.5.1",
+    "jquery": ">=3.5.0",
     "load-grunt-tasks": "^5.1.0"
   },
   "devDependencies": {
